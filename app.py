@@ -5,7 +5,7 @@ import os
 import random
 
 st.set_page_config(page_title="Flashcard App", layout="centered")
-st.title("📚 Flashcard Quizlet Clone")
+st.title("📚 Not Quizlet")
 
 CSV_PATH = "cards.csv"
 IMG_FOLDER = "img"
@@ -49,14 +49,17 @@ else:
         term = card["term"]
         definition = card["definition"]
         image_filename = card["filename"]
-        image_path = os.path.join(IMG_FOLDER, image_filename)
 
         st.markdown("### Flashcard")
 
         if not st.session_state.flipped:
             st.success(f"**Definition:**\n\n{definition}")
-            if os.path.exists(image_path):
-                st.image(Image.open(image_path))
+
+            # Only attempt to load and display image if valid filename exists
+            if isinstance(image_filename, str) and image_filename.strip():
+                image_path = os.path.join(IMG_FOLDER, image_filename.strip())
+                if os.path.exists(image_path):
+                    st.image(Image.open(image_path))
         else:
             st.info(f"**Term:** {term}")
 
